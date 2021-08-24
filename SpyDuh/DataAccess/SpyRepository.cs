@@ -39,9 +39,12 @@ namespace SpyDuh.DataAccess
             return _spies;
         }
 
-        static internal void RemoveSpy(Spy spy)
+        static internal List<Spy> RemoveSpy(Spy spy)
         {
-            _spies.Remove(spy);
+
+            var spyToRemove = _spies.FirstOrDefault(x => x.SpyName == spy.SpyName);
+            _spies.Remove(spyToRemove);
+            return _spies;
         }
     }
 }
