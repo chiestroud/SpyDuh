@@ -71,6 +71,16 @@ namespace SpyDuh.DataAccess
         {
             return _spyDuhMembers;
         }
+
+        internal Spy GetSingleSpyById(Guid id)
+        {
+            return _spyDuhMembers.FirstOrDefault(spy => spy.Id == id);
+        }
+        internal Spy GetSingleSpyBySpyName(string spyName)
+        {
+
+            return _spyDuhMembers.FirstOrDefault(spy => spy.SpyName == spyName);
+        }
     }
 
 }
