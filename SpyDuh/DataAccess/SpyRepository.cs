@@ -15,21 +15,24 @@ namespace SpyDuh.DataAccess
                 Name = "Jesse",
                 Age = 27,
                 SpyName = "Messy Jesse",
-                Skills = new List<Skills> {Skills.Lying, Skills.Sneaking}
+                Skills = new List<Skills> {Skills.Lying, Skills.Sneaking},
+                Id = Guid.NewGuid(),
             },
             new Spy
             {
                 Name = "Lindsey",
                 Age = 30,
                 SpyName = "Lockpicking Lindsey",
-                Skills = new List<Skills> {Skills.Lockpicking, Skills.Hacking}
+                Skills = new List<Skills> {Skills.Lockpicking, Skills.Hacking},
+                Id = Guid.NewGuid(),
             },
             new Spy
             {
                 Name = "Chie",
                 Age = 34,
                 SpyName = "Pikachie",
-                Skills = new List<Skills> {Skills.Sneaking, Skills.Spying}
+                Skills = new List<Skills> {Skills.Sneaking, Skills.Spying},
+                Id = Guid.NewGuid(),
             },
 
         };

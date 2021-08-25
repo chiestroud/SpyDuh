@@ -11,6 +11,7 @@ namespace SpyDuh.Models
         public int Age { get; set; }
         public string SpyName { get; set; }
         public List<Skills> Skills { get; set; }
+        public Guid Id { get; internal set; }
     }
 
     public enum Skills
