@@ -20,6 +20,11 @@ namespace SpyDuh.DataAccess
         {
             return _spyDuhMembers;
         }
+
+        internal IEnumerable<SpyDuhMember> GetSkills(Skills skills)
+        {
+            return _spyDuhMembers.Where(x => x.Skills.Any(skills));
+        }
     }
 
 }
