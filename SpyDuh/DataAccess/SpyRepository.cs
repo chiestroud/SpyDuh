@@ -16,7 +16,7 @@ namespace SpyDuh.DataAccess
                 Age = 27,
                 SpyName = "Messy Jesse",
                 Skills = new List<Skills> {Skills.Lying, Skills.Sneaking},
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid()
             },
             new Spy
             {
@@ -24,7 +24,7 @@ namespace SpyDuh.DataAccess
                 Age = 30,
                 SpyName = "Lockpicking Lindsey",
                 Skills = new List<Skills> {Skills.Lockpicking, Skills.Hacking},
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid()
             },
             new Spy
             {
@@ -32,10 +32,30 @@ namespace SpyDuh.DataAccess
                 Age = 34,
                 SpyName = "Pikachie",
                 Skills = new List<Skills> {Skills.Sneaking, Skills.Spying},
-                Id = Guid.NewGuid(),
+                Id = Guid.NewGuid()
             },
 
         };
+
+
+        internal object RemoveSkillById(Guid id, Skills skill)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            skills.Remove(skill);
+            return _spies;
+        }
+
+        internal object AddSkillById(Guid id, Skills skill)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            skills.Add(skill);
+            return _spies;
+        }
+
+        internal void Add(Spy newSpy)
+        {
+            _spies.Add(newSpy);
+        }
 
         internal IEnumerable<Spy> GetAll()
         {
