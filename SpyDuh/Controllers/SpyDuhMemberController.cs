@@ -31,10 +31,16 @@ namespace SpyDuh.Controllers
             _repo.AddSpyDuh(newSpy);
         }
 
-        [HttpGet("skills")]
-        public IEnumerable<SpyDuhMember> GetAllSpyDuhMembersSkills(Skills skills)
+        //[HttpGet("skills")]
+        //public IEnumerable<SpyDuhMember> GetAllSpyDuhMembersSkills(Skills skills)
+        //{
+        //    return _repo.GetSkills(skills);
+        //}
+
+        [HttpGet("/skill")]
+        public List<string> GetAllSkills()
         {
-            return _repo.GetSkills(skills);
+            return _repo.GetAllSpySkills();
         }
 
     }

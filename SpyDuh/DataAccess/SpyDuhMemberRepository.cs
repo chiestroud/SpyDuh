@@ -74,9 +74,22 @@ namespace SpyDuh.DataAccess
             return _spyDuhMembers;
         }
 
-        internal IEnumerable<SpyDuhMember> GetSkills(Skills skills)
+        // internal IEnumerable<SpyDuhMember> GetSkills(Skills skills)
+        //{
+        //return (IEnumerable<SpyDuhMember>)_spyDuhMembers.Where(x => x.Skills.Contains(skills));
+        //}
+
+        internal List<string> GetAllSpySkills()
         {
-            return (IEnumerable<SpyDuhMember>)_spyDuhMembers.Where(x => x.Skills.Contains(skills));
+            List<string> skills = new List<string>();
+            foreach(var spy in _spyDuhMembers)
+            {
+                foreach (var skill in spy.Skills)
+                {
+                    skills.Add(skill.ToString());
+                }
+            }
+            return skills;
         }
     }
 
