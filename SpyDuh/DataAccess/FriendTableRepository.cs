@@ -11,15 +11,23 @@ namespace SpyDuh.DataAccess
         static List<FriendRelationshipTable> _friendTable = new List<FriendRelationshipTable>();
         internal void Add(FriendRelationshipTable relationshipTable)
         {
-            relationshipTable.Id = Guid.NewGuid();
             _friendTable.Add(relationshipTable);
         }
         internal IEnumerable<Guid> GetFriends(Guid userId)
         {
-            var tables = _friendTable.Where(table => table.FriendId == userId).ToList();
+            var tables = _friendTable.Where(table => table.UserId == userId).ToList();
             List<Guid> friendsList = new List<Guid>();
-            tables.ForEach(id => friendsList.Add(id.FriendedId));
+            tables.ForEach(id => friendsList.Add(id.FriendId));
             return friendsList;
+        }
+        internal bool CheckUniqueTable(Guid userId, Guid friendId)
+        {
+            var uniqueId = _friendTable.FirstOrDefault(table => table.FriendId == friendId && table.UserId == userId);
+            if (uniqueId != null)
+            {
+                return false;
+            }
+            return true;
         }
     }
 }

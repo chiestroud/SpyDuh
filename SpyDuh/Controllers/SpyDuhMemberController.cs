@@ -31,16 +31,22 @@ namespace SpyDuh.Controllers
         {
            return _repo.GetSingleSpyBySpyName(spyName);
         }
+        // Here we can use the spy nick name which should be unique to fetch all their friends in the URL IE. api/Jrob/friends
         [HttpGet("{spyName}/friends")]
         public List<Spy> GetSingleSpyFriends(string spyName)
         {
-            var spy = _repo.GetSingleSpyBySpyName(spyName);
-            var friendIdList = _friendsRepo.GetFriends(spy.Id);
+            // First we need to get the single instance of a spy via their spy name
+            var singleSpy = _repo.GetSingleSpyBySpyName(spyName);
+
+            // Next we search the intermediary table for matching Guids and get the friend ID's and add them to List
+            List<Guid> friendIdList = _friendsRepo.GetFriends(singleSpy.Id).ToList();
+
+            // This list will hold the object references of the friends to send back to the httpget request
             List<Spy> friendsList = new List<Spy>();
-            foreach (var friend in friendIdList)
-            {
-                friendsList.Add(_repo.GetSingleSpyById(friend));
-            }
+
+            // Iterating over the list of friends IDs to populate the friends list with object references instead of GUIDs
+            friendIdList.ForEach(friend => friendsList.Add(_repo.GetSingleSpyById(friend)));
+
             return friendsList;
         }
         [HttpPost]
@@ -49,16 +55,22 @@ namespace SpyDuh.Controllers
         {
             _repo.AddSpyDuh(newSpy);
         }
-        [HttpPost("{friend}/add/{friended}")]
-        public void AddFriend(string friend, string friended)
+        [HttpPost("{user}/add/{friend}")]
+        public IActionResult AddFriend(string user, string friend)
         {
             var relationship = new FriendRelationshipTable
             {
+                Id = Guid.NewGuid(),
+                UserId = _repo.GetSingleSpyBySpyName(user).Id,
                 FriendId = _repo.GetSingleSpyBySpyName(friend).Id,
-                FriendedId = _repo.GetSingleSpyBySpyName(friended).Id,
             };
 
-            _friendsRepo.Add(relationship);
+            if (_friendsRepo.CheckUniqueTable(relationship.UserId, relationship.FriendId))
+            { 
+                _friendsRepo.Add(relationship);
+                return Created("api/[controller]", relationship);
+            }
+            return BadRequest("This person is already a friend of user");
         }
     }
 }
