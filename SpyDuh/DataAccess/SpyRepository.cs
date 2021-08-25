@@ -48,6 +48,10 @@ namespace SpyDuh.DataAccess
         internal object AddSkillById(Guid id, Skills skill)
         {
             var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            if (skills.Contains(skill))
+            {
+                return _spies;
+            }
             skills.Add(skill);
             return _spies;
         }
