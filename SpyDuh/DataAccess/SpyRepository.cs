@@ -37,6 +37,26 @@ namespace SpyDuh.DataAccess
 
         };
 
+
+        internal object RemoveSkillById(Guid id, Skills skill)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            skills.Remove(skill);
+            return _spies;
+        }
+
+        internal object AddSkillById(Guid id, Skills skill)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            skills.Add(skill);
+            return _spies;
+        }
+
+        internal void Add(Spy newSpy)
+        {
+            _spies.Add(newSpy);
+        }
+
         internal IEnumerable<Spy> GetAll()
         {
             return _spies;

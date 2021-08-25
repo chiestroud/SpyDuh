@@ -24,5 +24,29 @@ namespace SpyDuh.Controllers
         {
             return _repo.GetAll();
         }
+
+        // Add a new spy
+        [HttpPost]
+
+        public void AddSpy(Spy newSpy)
+        {
+            _repo.Add(newSpy);
+        }
+
+        // Add a new skill to a spy
+        [HttpPut("{id}/skills")]
+        public object UpdateSkill(Guid id, Skills skill)
+        {
+            return _repo.AddSkillById(id, skill);
+        }
+
+        // Delete sklls from a spy
+        [HttpDelete("{id}/skills")]
+        public object RemoveSkill(Guid id, Skills skill)
+        {
+            return _repo.RemoveSkillById(id, skill);
+        }
+
+        
     }
 }
