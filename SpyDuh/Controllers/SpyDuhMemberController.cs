@@ -31,7 +31,7 @@ namespace SpyDuh.Controllers
             _repo.AddSpyDuh(newSpy);
         }
 
-        [HttpGet]
+        [HttpGet("skills")]
         public IEnumerable<SpyDuhMember> GetAllSpyDuhMembersSkills(Skills skills)
         {
             return _repo.GetSkills(skills);
