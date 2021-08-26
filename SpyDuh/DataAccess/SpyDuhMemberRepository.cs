@@ -48,7 +48,6 @@ namespace SpyDuh.DataAccess
                 Name = "Sara",
                 SpyName = "Black-Widow",
                 Age = 54,
-
                 Skills = new List<Skills>{ Skills.Spying }
             },
             new SpyDuhMember
@@ -76,17 +75,14 @@ namespace SpyDuh.DataAccess
         {
             return _spyDuhMembers.FirstOrDefault(spy => spy.Id == id);
         }
+
         internal Spy GetSingleSpyBySpyName(string spyName)
         {
 
             return _spyDuhMembers.FirstOrDefault(spy => spy.SpyName == spyName);
         }
 
-        // internal IEnumerable<SpyDuhMember> GetSkills(Skills skills)
-        //{
-        //return (IEnumerable<SpyDuhMember>)_spyDuhMembers.Where(x => x.Skills.Contains(skills));
-        //}
-
+        // Lists all the spyduh member skills
         internal List<string> GetAllSpySkills()
         {
             List<string> skills = new List<string>();
@@ -98,6 +94,18 @@ namespace SpyDuh.DataAccess
                 }
             }
             return skills;
+        }
+
+        // Gets skills from spyduh member id
+        internal object GetSkillById(Guid id)
+        {
+            var skills = _spyDuhMembers.FirstOrDefault(x => x.Id == id).Skills;
+            List<string> spySkill = new List<string>();
+            foreach(var skill in skills)
+            {
+                spySkill.Add(skill.ToString());
+            }
+            return spySkill;
         }
     }
 
