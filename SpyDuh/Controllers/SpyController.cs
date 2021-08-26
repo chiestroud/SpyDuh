@@ -25,6 +25,12 @@ namespace SpyDuh.Controllers
             return _repo.GetAll();
         }
 
+        [HttpGet("{id}/skills")]
+        public object FindSpy(Guid id)
+        {
+            return _repo.FindSkillWithId(id);
+        }
+
         // Add a new spy
         [HttpPost]
 
@@ -33,18 +39,38 @@ namespace SpyDuh.Controllers
             _repo.Add(newSpy);
         }
 
+      
+
         // Add a new skill to a spy
         [HttpPut("{id}/skills")]
-        public object UpdateSkill(Guid id, Skills skill)
+        public IActionResult UpdateSkill(Guid id, Skills skill)
         {
-            return _repo.AddSkillById(id, skill);
+            if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("We don't have a spy with the ID");
+            }
+            else
+            {
+                return Ok(_repo.AddSkillById(id, skill));
+            }
         }
 
         // Delete sklls from a spy
         [HttpDelete("{id}/skills")]
-        public object RemoveSkill(Guid id, Skills skill)
+        public IActionResult RemoveSkill(Guid id, Skills skill)
         {
-            return _repo.RemoveSkillById(id, skill);
+            if (_repo.AddSkillById(id, skill) is null)
+            {
+                return BadRequest("The spy doesn't have the skill. Try again");
+            }
+            else if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("We don't have a spy with the ID");
+            }
+            {
+                return Ok(_repo.RemoveSkillById(id, skill));
+            }
+            
         }
 
         

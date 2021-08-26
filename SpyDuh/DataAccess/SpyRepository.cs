@@ -56,6 +56,24 @@ namespace SpyDuh.DataAccess
             return _spies;
         }
 
+        internal object FindSkillWithId(Guid id)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            List<string> spySkill = new List<string>();
+            foreach(var skill in skills)
+            {
+                spySkill.Add(skill.ToString());
+            }
+            return spySkill;
+        }
+
+        internal object FindSpyWithId(Guid id)
+        {
+            var spy = _spies.FirstOrDefault(x => x.Id == id);
+            return spy;
+        }
+
+
         internal void Add(Spy newSpy)
         {
             _spies.Add(newSpy);
