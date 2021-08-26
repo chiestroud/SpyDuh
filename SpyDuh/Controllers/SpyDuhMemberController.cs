@@ -26,6 +26,7 @@ namespace SpyDuh.Controllers
         {
             return _repo.GetAll();
         }
+
         [HttpGet("{spyName}")]
         public Spy GetSpy(string spyName)
         {
@@ -49,8 +50,8 @@ namespace SpyDuh.Controllers
 
             return friendsList;
         }
-        [HttpPost]
 
+        [HttpPost]
         public void AddSpyDuhMember(Spy newSpy)
         {
             _repo.AddSpyDuh(newSpy);
@@ -72,5 +73,18 @@ namespace SpyDuh.Controllers
             }
             return BadRequest("This person is already a friend of user");
         }
+
+        [HttpGet("/allSpyDuhMemberSkills")]
+        public List<string> GetAllSkills()
+        {
+            return _repo.GetAllSpySkills();
+        }
+
+        [HttpGet("{id}/skillsBySpyDuhMemberId")]
+        public object FindSpy(Guid id)
+        {
+            return _repo.GetSkillById(id);
+        }
+
     }
 }
