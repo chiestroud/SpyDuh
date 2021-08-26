@@ -19,24 +19,35 @@ namespace SpyDuh.Controllers
             _repo = new SpyRepository();
         }
 
+        // Get all Spies
         [HttpGet]
         public IEnumerable<Spy> GetAllSpies()
         {
             return _repo.GetAll();
         }
 
+        // Get skills from Spy ID
         [HttpGet("{id}/skills")]
-        public object FindSpy(Guid id)
+        public IActionResult FindSpy(Guid id)
         {
-            return _repo.FindSkillWithId(id);
+            if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("No matching ID found");
+            }
+            return Ok(_repo.FindSkillWithId(id));
         }
 
         // Add a new spy
         [HttpPost]
 
-        public void AddSpy(Spy newSpy)
+        public IActionResult AddSpy(Spy newSpy)
         {
+            if (string.IsNullOrEmpty(newSpy.Name) || string.IsNullOrEmpty(newSpy.SpyName))
+            {
+                return BadRequest("Name and SpyName are required fields");
+            }
             _repo.Add(newSpy);
+            return Created("/spy/1", newSpy);
         }
 
       
