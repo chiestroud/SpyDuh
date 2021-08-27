@@ -10,6 +10,4 @@ namespace SpyDuh.Models
         //public List<Guid> FriendList { get; set; }
         //public List<Guid> EnemyList { get; set; }
     }
-
-    
 }
