@@ -34,6 +34,13 @@ namespace SpyDuh.DataAccess
                 Skills = new List<Skills> {Skills.Sneaking, Skills.Spying},
                 Id = Guid.NewGuid()
             },
+            new Spy
+            {
+                Name = "Rob",
+                Age = 28,
+                SpyName = "The Invisible",
+                Skills = new List<Skills> {Skills.Spying, Skills.Hacking}
+            }
 
         };
 
@@ -45,12 +52,49 @@ namespace SpyDuh.DataAccess
             return _spies;
         }
 
+        
+
         internal object AddSkillById(Guid id, Skills skill)
         {
             var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            if (skills.Contains(skill))
+            {
+                return _spies;
+            }
             skills.Add(skill);
             return _spies;
         }
+
+        internal object FindSkillWithId(Guid id)
+        {
+            var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            List<string> spySkill = new List<string>();
+            foreach(var skill in skills)
+            {
+                spySkill.Add(skill.ToString());
+            }
+            return spySkill;
+        }
+
+        internal object FindSpyWithId(Guid id)
+        {
+            var spy = _spies.FirstOrDefault(x => x.Id == id);
+            return spy;
+        }
+
+        internal object FindSkillFromSpy(Guid id, Skills skill)
+        {
+            var spy = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            if (spy.Contains(skill))
+            {
+                return spy;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
 
         internal void Add(Spy newSpy)
         {
@@ -64,7 +108,6 @@ namespace SpyDuh.DataAccess
 
         static internal List<Spy> RemoveSpy(Spy spy)
         {
-
             var spyToRemove = _spies.FirstOrDefault(x => x.SpyName == spy.SpyName);
             _spies.Remove(spyToRemove);
             return _spies;
