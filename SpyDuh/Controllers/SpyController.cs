@@ -70,13 +70,14 @@ namespace SpyDuh.Controllers
         [HttpDelete("{id}/skills")]
         public IActionResult RemoveSkill(Guid id, Skills skill)
         {
-            if (_repo.AddSkillById(id, skill) is null)
-            {
-                return BadRequest("The spy doesn't have the skill. Try again");
-            }
-            else if (_repo.FindSpyWithId(id) is null)
+            
+            if (_repo.FindSpyWithId(id) is null)
             {
                 return BadRequest("We don't have a spy with the ID");
+            }
+            else if (_repo.FindSkillFromSpy(id, skill) is null)
+            {
+                return BadRequest("The person doesn't have the skill");
             }
             {
                 return Ok(_repo.RemoveSkillById(id, skill));

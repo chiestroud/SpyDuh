@@ -52,6 +52,8 @@ namespace SpyDuh.DataAccess
             return _spies;
         }
 
+        
+
         internal object AddSkillById(Guid id, Skills skill)
         {
             var skills = _spies.FirstOrDefault(x => x.Id == id).Skills;
@@ -78,6 +80,19 @@ namespace SpyDuh.DataAccess
         {
             var spy = _spies.FirstOrDefault(x => x.Id == id);
             return spy;
+        }
+
+        internal object FindSkillFromSpy(Guid id, Skills skill)
+        {
+            var spy = _spies.FirstOrDefault(x => x.Id == id).Skills;
+            if (spy.Contains(skill))
+            {
+                return spy;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
