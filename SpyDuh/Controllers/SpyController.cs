@@ -31,6 +31,7 @@ namespace SpyDuh.Controllers
         public void AddSpy(Spy newSpy)
         {
             _repo.Add(newSpy);
+            return Created("/spy/1", newSpy);
         }
 
         // Add a new skill to a spy
@@ -42,9 +43,20 @@ namespace SpyDuh.Controllers
 
         // Delete sklls from a spy
         [HttpDelete("{id}/skills")]
-        public object RemoveSkill(Guid id, Skills skill)
+        public IActionResult RemoveSkill(Guid id, Skills skill)
         {
-            return _repo.RemoveSkillById(id, skill);
+            if (_repo.AddSkillById(id, skill) is null)
+            {
+                return BadRequest("The spy doesn't have the skill. Try again");
+            }
+            else if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("We don't have a spy with the ID");
+            }
+            {
+                return Ok(_repo.RemoveSkillById(id, skill));
+            }
+            
         }
 
         

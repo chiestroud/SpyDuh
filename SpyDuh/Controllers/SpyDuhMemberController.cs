@@ -30,9 +30,11 @@ namespace SpyDuh.Controllers
         }
 
         [HttpGet("{spyName}")]
-        public Spy GetSpy(string spyName)
+        public IActionResult GetSpy(string spyName)
         {
-            return _repo.GetSingleSpyBySpyName(spyName);
+            var spy = _repo.GetSingleSpyBySpyName(spyName);
+            if (string.IsNullOrWhiteSpace(spyName)) return BadRequest("SpyName is a required field");
+            return Ok(spy);
         }
         // Here we can use the spy nick name which should be unique to fetch all their friends in the URL IE. api/Jrob/friends
         [HttpGet("{spyName}/friends")]
