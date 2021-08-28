@@ -61,6 +61,7 @@ namespace SpyDuh.Controllers
             if (friendsList == null || friendsList.Count < 1) return Ok("No friends :*-( ");
             return Ok(friendsList);
         }
+
         [HttpGet("{spyName}/enemies")]
         public IActionResult GetSingleSpyEnemies(string spyName)
         {
@@ -78,6 +79,7 @@ namespace SpyDuh.Controllers
 
             return Ok(enemyList);
         }
+
         [HttpPost]
         public IActionResult AddSpyDuhMember(Spy newSpy)
         {
@@ -86,6 +88,7 @@ namespace SpyDuh.Controllers
             _repo.AddSpyDuh(newSpy);
             return Created($"api/{newSpy.Id}", newSpy);
         }
+
         [HttpPost("{userSpyName}/add-friend/{friendSpyName}")]
         public IActionResult AddFriend(string userSpyName, string friendSpyName)
         {
@@ -109,6 +112,7 @@ namespace SpyDuh.Controllers
             }
             return BadRequest("This person is already a friend of user");
         }
+
         [HttpPost("{userSpyName}/add-enemy/{enemySpyName}")]
         public IActionResult AddEnemy(string userSpyName, string enemySpyName)
         {
@@ -132,17 +136,25 @@ namespace SpyDuh.Controllers
             }
             return BadRequest("This person is already an enemy of user");
         }
+
         [HttpGet("/allSpyDuhMemberSkills")]
-        public List<string> GetAllSkills()
+        public IActionResult GetAllSkills()
         {
-            return _repo.GetAllSpySkills();
+            return Ok(_repo.GetAllSpySkills());
         }
+
 
         [HttpGet("{id}/skillsBySpyDuhMemberId")]
-        public object FindSpy(Guid id)
+        public IActionResult FindSpy(Guid id)
         {
-            return _repo.GetSkillById(id);
-        }
+            var spy = _repo.GetSingleSpyById(id);
 
+            if (spy == null)
+            {
+                return BadRequest("No matching ID found");
+            }
+            
+            return Ok(_repo.GetSkillById(id));
+        }
     }
 }

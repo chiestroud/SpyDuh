@@ -16,7 +16,7 @@ namespace SpyDuh.DataAccess
                 Name = "Jin",
                 SpyName = "Raptor-Johnny",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lockpicking, Skills.Hacking }
             },
             new SpyDuhMember
             {
@@ -24,7 +24,7 @@ namespace SpyDuh.DataAccess
                 Name = "Sonny",
                 SpyName = "The-Morning-Star",
                 Age = 15,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lying }
             },
             new SpyDuhMember
             {
@@ -32,7 +32,7 @@ namespace SpyDuh.DataAccess
                 Name = "Kenji",
                 SpyName = "Okonomiyaki",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Sneaking }
             },
             new SpyDuhMember
             {
@@ -40,7 +40,7 @@ namespace SpyDuh.DataAccess
                 Name = "Demetri",
                 SpyName = "Slav-Squat",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Hacking, Skills.Lockpicking }
             },
             new SpyDuhMember
             {
@@ -56,7 +56,7 @@ namespace SpyDuh.DataAccess
                 Name = "Theocles",
                 SpyName = "Zoo-Zeus",
                 Age = 91,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lying }
             },
         };
 
@@ -108,5 +108,4 @@ namespace SpyDuh.DataAccess
             return spySkill;
         }
     }
-
 }
