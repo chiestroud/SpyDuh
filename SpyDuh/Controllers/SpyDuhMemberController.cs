@@ -143,7 +143,6 @@ namespace SpyDuh.Controllers
             return Ok(_repo.GetAllSpySkills());
         }
 
-
         [HttpGet("{id}/skillsBySpyDuhMemberId")]
         public IActionResult FindSpy(Guid id)
         {
@@ -153,13 +152,26 @@ namespace SpyDuh.Controllers
             {
                 return BadRequest("No matching ID found");
             }
-            
             return Ok(_repo.GetSkillById(id));
         }
+
         [HttpGet("getspiesbyskill/{skill}")]
         public IActionResult FindSpyBySkill(Skills skill)
         {
             return Ok(_repo.GetSpiesBySkill(skill));
+        }
+
+        [HttpGet("{id}/assignmentDaysLeftById")]
+        public IActionResult AssignmentDaysLeft(Guid id)
+        {
+            var spy = _repo.GetSingleSpyById(id);
+
+            if (spy == null)
+            {
+                return BadRequest("No matching ID found");
+            }
+
+            return Ok(_repo.AssignmentDaysLeftById(id));
         }
     }
 }
