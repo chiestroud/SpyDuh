@@ -24,22 +24,30 @@ namespace SpyDuh.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<Spy> GetAllSpyDuhMembers()
+        public IActionResult GetAllSpyDuhMembers()
         {
-            return _repo.GetAll();
+            return Ok(_repo.GetAll());
         }
 
         [HttpGet("{spyName}")]
-        public Spy GetSpy(string spyName)
+        public IActionResult GetSpy(string spyName)
         {
-            return _repo.GetSingleSpyBySpyName(spyName);
+            var spy = _repo.GetSingleSpyBySpyName(spyName);
+
+            if (string.IsNullOrWhiteSpace(spyName)) return BadRequest("SpyName is a required field");
+
+            if (spy == null) return NotFound("No spy with this name exists");
+
+            return Ok(spy);
         }
         // Here we can use the spy nick name which should be unique to fetch all their friends in the URL IE. api/Jrob/friends
         [HttpGet("{spyName}/friends")]
-        public List<Spy> GetSingleSpyFriends(string spyName)
+        public IActionResult GetSingleSpyFriends(string spyName)
         {
+            if (string.IsNullOrWhiteSpace(spyName)) return BadRequest("Spy name must be a string");
             // First we need to get the single instance of a spy via their spy name
             var singleSpy = _repo.GetSingleSpyBySpyName(spyName);
+            if (singleSpy == null) return NotFound("Spy with this name does not exist");
 
             // Next we search the intermediary table for matching Guids and get the friend ID's and add them to List
             List<Guid> friendIdList = _friendsRepo.GetFriends(singleSpy.Id).ToList();
@@ -50,23 +58,35 @@ namespace SpyDuh.Controllers
             // Iterating over the list of friends IDs to populate the friends list with object references instead of GUIDs
             friendIdList.ForEach(friend => friendsList.Add(_repo.GetSingleSpyById(friend)));
 
-            return friendsList;
+            if (friendsList == null || friendsList.Count < 1) return Ok("No friends :*-( ");
+            return Ok(friendsList);
         }
 
         [HttpGet("{spyName}/enemies")]
-        public List<Spy> GetSingleSpyEnemies(string spyName)
+        public IActionResult GetSingleSpyEnemies(string spyName)
         {
+            if (string.IsNullOrWhiteSpace(spyName)) return BadRequest("Spy name must be a string");
+
             var singleSpy = _repo.GetSingleSpyBySpyName(spyName);
+
+            if (singleSpy == null) return NotFound("Spy with this name does not exist");
+
             List<Guid> enemyIdList = _enemyRepo.GetEnemies(singleSpy.Id).ToList();
             List<Spy> enemyList = new List<Spy>();
             enemyIdList.ForEach(enemy => enemyList.Add(_repo.GetSingleSpyById(enemy)));
-            return enemyList;
+
+            if (enemyList == null || enemyList.Count < 1) return Ok("No enemies! :-D ");
+
+            return Ok(enemyList);
         }
 
         [HttpPost]
-        public void AddSpyDuhMember(Spy newSpy)
+        public IActionResult AddSpyDuhMember(Spy newSpy)
         {
+            if (string.IsNullOrWhiteSpace(newSpy.Name) || string.IsNullOrWhiteSpace(newSpy.SpyName)) return BadRequest("Name and Spyname are required fields");
+            if (newSpy.Age <= 12) return BadRequest("Spy must be 13 or older to participate in the SpyDuh Membership Program\u2122");
             _repo.AddSpyDuh(newSpy);
+            return Created($"api/{newSpy.Id}", newSpy);
         }
 
         [HttpPost("{userSpyName}/add-friend/{friendSpyName}")]
@@ -135,6 +155,11 @@ namespace SpyDuh.Controllers
             }
             
             return Ok(_repo.GetSkillById(id));
+        }
+        [HttpGet("getspiesbyskill/{skill}")]
+        public IActionResult FindSpyBySkill(Skills skill)
+        {
+            return Ok(_repo.GetSpiesBySkill(skill));
         }
     }
 }

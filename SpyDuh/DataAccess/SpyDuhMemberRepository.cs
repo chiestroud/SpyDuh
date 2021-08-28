@@ -107,5 +107,11 @@ namespace SpyDuh.DataAccess
             }
             return spySkill;
         }
+
+        internal IEnumerable<Spy> GetSpiesBySkill(Skills skill)
+        {
+            var filteredSpyList = _spyDuhMembers.Where(spy => spy.Skills.Contains(skill));
+            return filteredSpyList;
+        }
     }
 }
