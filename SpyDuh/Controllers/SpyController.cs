@@ -19,26 +19,51 @@ namespace SpyDuh.Controllers
             _repo = new SpyRepository();
         }
 
+        // Get all Spies
         [HttpGet]
         public IEnumerable<Spy> GetAllSpies()
         {
             return _repo.GetAll();
         }
 
+        // Get skills from Spy ID
+        [HttpGet("{id}/skills")]
+        public IActionResult FindSpy(Guid id)
+        {
+            if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("No matching ID found");
+            }
+            return Ok(_repo.FindSkillWithId(id));
+        }
+
         // Add a new spy
         [HttpPost]
 
-        public void AddSpy(Spy newSpy)
+        public IActionResult AddSpy(Spy newSpy)
         {
+            if (string.IsNullOrEmpty(newSpy.Name) || string.IsNullOrEmpty(newSpy.SpyName))
+            {
+                return BadRequest("Name and SpyName are required fields");
+            }
             _repo.Add(newSpy);
             return Created("/spy/1", newSpy);
         }
 
+      
+
         // Add a new skill to a spy
         [HttpPut("{id}/skills")]
-        public object UpdateSkill(Guid id, Skills skill)
+        public IActionResult UpdateSkill(Guid id, Skills skill)
         {
-            return _repo.AddSkillById(id, skill);
+            if (_repo.FindSpyWithId(id) is null)
+            {
+                return BadRequest("We don't have a spy with the ID");
+            }
+            else
+            {
+                return Ok(_repo.AddSkillById(id, skill));
+            }
         }
 
         // Delete sklls from a spy
