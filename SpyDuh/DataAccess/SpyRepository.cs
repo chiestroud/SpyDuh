@@ -16,7 +16,8 @@ namespace SpyDuh.DataAccess
                 Age = 27,
                 SpyName = "Messy Jesse",
                 Skills = new List<Skills> {Skills.Lying, Skills.Sneaking},
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                AssignmentDaysLeft = 5
             },
             new Spy
             {
@@ -24,7 +25,8 @@ namespace SpyDuh.DataAccess
                 Age = 30,
                 SpyName = "Lockpicking Lindsey",
                 Skills = new List<Skills> {Skills.Lockpicking, Skills.Hacking},
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                AssignmentDaysLeft = 100
             },
             new Spy
             {
@@ -32,18 +34,20 @@ namespace SpyDuh.DataAccess
                 Age = 34,
                 SpyName = "Pikachie",
                 Skills = new List<Skills> {Skills.Sneaking, Skills.Spying},
-                Id = Guid.NewGuid()
+                Id = Guid.NewGuid(),
+                AssignmentDaysLeft = 3
             },
             new Spy
             {
                 Name = "Rob",
                 Age = 28,
                 SpyName = "The Invisible",
-                Skills = new List<Skills> {Skills.Spying, Skills.Hacking}
+                Skills = new List<Skills> {Skills.Spying, Skills.Hacking},
+                Id = Guid.NewGuid(),
+                AssignmentDaysLeft = 0
             }
 
         };
-
 
         internal object RemoveSkillById(Guid id, Skills skill)
         {
@@ -51,8 +55,6 @@ namespace SpyDuh.DataAccess
             skills.Remove(skill);
             return _spies;
         }
-
-        
 
         internal object AddSkillById(Guid id, Skills skill)
         {
@@ -94,7 +96,6 @@ namespace SpyDuh.DataAccess
                 return null;
             }
         }
-
 
         internal void Add(Spy newSpy)
         {

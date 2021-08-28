@@ -16,7 +16,8 @@ namespace SpyDuh.DataAccess
                 Name = "Jin",
                 SpyName = "Raptor-Johnny",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying, Skills.Lockpicking, Skills.Hacking }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lockpicking, Skills.Hacking },
+                AssignmentDaysLeft = 3
             },
             new SpyDuhMember
             {
@@ -24,7 +25,8 @@ namespace SpyDuh.DataAccess
                 Name = "Sonny",
                 SpyName = "The-Morning-Star",
                 Age = 15,
-                Skills = new List<Skills>{ Skills.Spying, Skills.Lying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lying },
+                AssignmentDaysLeft = 56
             },
             new SpyDuhMember
             {
@@ -32,7 +34,8 @@ namespace SpyDuh.DataAccess
                 Name = "Kenji",
                 SpyName = "Okonomiyaki",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying, Skills.Sneaking }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Sneaking },
+                AssignmentDaysLeft = 1
             },
             new SpyDuhMember
             {
@@ -40,7 +43,8 @@ namespace SpyDuh.DataAccess
                 Name = "Demetri",
                 SpyName = "Slav-Squat",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying, Skills.Hacking, Skills.Lockpicking }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Hacking, Skills.Lockpicking },
+                AssignmentDaysLeft = 100
             },
             new SpyDuhMember
             {
@@ -48,7 +52,8 @@ namespace SpyDuh.DataAccess
                 Name = "Sara",
                 SpyName = "Black-Widow",
                 Age = 54,
-                Skills = new List<Skills>{ Skills.Spying }
+                Skills = new List<Skills>{ Skills.Spying },
+                AssignmentDaysLeft = 0
             },
             new SpyDuhMember
             {
@@ -56,7 +61,8 @@ namespace SpyDuh.DataAccess
                 Name = "Theocles",
                 SpyName = "Zoo-Zeus",
                 Age = 91,
-                Skills = new List<Skills>{ Skills.Spying, Skills.Lying }
+                Skills = new List<Skills>{ Skills.Spying, Skills.Lying },
+                AssignmentDaysLeft = 7
             },
         };
 
@@ -78,7 +84,6 @@ namespace SpyDuh.DataAccess
 
         internal Spy GetSingleSpyBySpyName(string spyName)
         {
-
             return _spyDuhMembers.FirstOrDefault(spy => spy.SpyName == spyName);
         }
 
@@ -112,6 +117,12 @@ namespace SpyDuh.DataAccess
         {
             var filteredSpyList = _spyDuhMembers.Where(spy => spy.Skills.Contains(skill));
             return filteredSpyList;
+        }
+
+        internal object AssignmentDaysLeftById(Guid id)
+        {
+            var daysLeft = _spyDuhMembers.FirstOrDefault(x => x.Id == id).AssignmentDaysLeft;
+            return daysLeft;
         }
     }
 }
