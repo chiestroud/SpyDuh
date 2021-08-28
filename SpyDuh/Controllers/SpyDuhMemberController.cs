@@ -133,7 +133,8 @@ namespace SpyDuh.Controllers
             {
                 return BadRequest("No matching ID found");
             }
-                return Ok(_repo.GetSkillById(id));
+            
+            return Ok(_repo.GetSkillById(id));
         }
     }
 }
