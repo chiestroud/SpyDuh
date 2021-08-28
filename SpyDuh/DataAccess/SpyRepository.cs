@@ -34,6 +34,13 @@ namespace SpyDuh.DataAccess
                 Skills = new List<Skills> {Skills.Sneaking, Skills.Spying},
                 Id = Guid.NewGuid()
             },
+            new Spy
+            {
+                Name = "Rob",
+                Age = 28,
+                SpyName = "The Invisible",
+                Skills = new List<Skills> {Skills.Spying, Skills.Hacking}
+            }
 
         };
 
