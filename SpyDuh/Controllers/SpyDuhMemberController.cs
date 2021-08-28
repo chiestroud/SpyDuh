@@ -15,10 +15,12 @@ namespace SpyDuh.Controllers
     {
         SpyDuhMemberRepository _repo;
         FriendTableRepository _friendsRepo;
+        EnemyTableRepository _enemyRepo;
         public SpyDuhMemberController()
         {
             _repo = new SpyDuhMemberRepository();
             _friendsRepo = new FriendTableRepository();
+            _enemyRepo = new EnemyTableRepository();
         }
 
         [HttpGet]
@@ -30,7 +32,7 @@ namespace SpyDuh.Controllers
         [HttpGet("{spyName}")]
         public Spy GetSpy(string spyName)
         {
-           return _repo.GetSingleSpyBySpyName(spyName);
+            return _repo.GetSingleSpyBySpyName(spyName);
         }
         // Here we can use the spy nick name which should be unique to fetch all their friends in the URL IE. api/Jrob/friends
         [HttpGet("{spyName}/friends")]
@@ -50,30 +52,66 @@ namespace SpyDuh.Controllers
 
             return friendsList;
         }
-
+        [HttpGet("{spyName}/enemies")]
+        public List<Spy> GetSingleSpyEnemies(string spyName)
+        {
+            var singleSpy = _repo.GetSingleSpyBySpyName(spyName);
+            List<Guid> enemyIdList = _enemyRepo.GetEnemies(singleSpy.Id).ToList();
+            List<Spy> enemyList = new List<Spy>();
+            enemyIdList.ForEach(enemy => enemyList.Add(_repo.GetSingleSpyById(enemy)));
+            return enemyList;
+        }
         [HttpPost]
         public void AddSpyDuhMember(Spy newSpy)
         {
             _repo.AddSpyDuh(newSpy);
         }
-        [HttpPost("{user}/add/{friend}")]
-        public IActionResult AddFriend(string user, string friend)
+        [HttpPost("{userSpyName}/add-friend/{friendSpyName}")]
+        public IActionResult AddFriend(string userSpyName, string friendSpyName)
         {
             var relationship = new FriendRelationshipTable
             {
                 Id = Guid.NewGuid(),
-                UserId = _repo.GetSingleSpyBySpyName(user).Id,
-                FriendId = _repo.GetSingleSpyBySpyName(friend).Id,
+                UserId = _repo.GetSingleSpyBySpyName(userSpyName).Id,
+                FriendId = _repo.GetSingleSpyBySpyName(friendSpyName).Id,
             };
-
-            if (_friendsRepo.CheckUniqueTable(relationship.UserId, relationship.FriendId))
+            var friendDoesNotExist = _friendsRepo.CheckUniqueFriendTable(relationship.UserId, relationship.FriendId);
+            var enemyDoesNotExist = _enemyRepo.CheckUniqueEnemyTable(relationship.UserId, relationship.FriendId);
+            if (friendDoesNotExist && enemyDoesNotExist)
             { 
+                _friendsRepo.Add(relationship);
+                return Created("api/[controller]", relationship);
+            } else if (!enemyDoesNotExist)
+            {
+                _enemyRepo.Remove(relationship.UserId, relationship.FriendId);
                 _friendsRepo.Add(relationship);
                 return Created("api/[controller]", relationship);
             }
             return BadRequest("This person is already a friend of user");
         }
-
+        [HttpPost("{userSpyName}/add-enemy/{enemySpyName}")]
+        public IActionResult AddEnemy(string userSpyName, string enemySpyName)
+        {
+            var relationship = new EnemyRelationshipTable
+            {
+                Id = Guid.NewGuid(),
+                UserId = _repo.GetSingleSpyBySpyName(userSpyName).Id,
+                EnemyId = _repo.GetSingleSpyBySpyName(enemySpyName).Id,
+            };
+            var friendDoesNotExist = _friendsRepo.CheckUniqueFriendTable(relationship.UserId, relationship.EnemyId);
+            var enemyDoesNotExist = _enemyRepo.CheckUniqueEnemyTable(relationship.UserId, relationship.EnemyId);
+            if (friendDoesNotExist && enemyDoesNotExist)
+            {
+                _enemyRepo.Add(relationship);
+                return Created("api/[controller]", relationship);
+            } else if (!friendDoesNotExist)
+            {
+                _friendsRepo.Remove(relationship.UserId, relationship.EnemyId);
+                _enemyRepo.Add(relationship);
+                return Created("api/[controller]", relationship);
+            }
+            return BadRequest("This person is already an enemy of user");
+        }
         [HttpGet("/allSpyDuhMemberSkills")]
         public List<string> GetAllSkills()
         {
