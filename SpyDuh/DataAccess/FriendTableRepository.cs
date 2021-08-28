@@ -13,6 +13,12 @@ namespace SpyDuh.DataAccess
         {
             _friendTable.Add(relationshipTable);
         }
+        internal List<FriendRelationshipTable> Remove(Guid userId, Guid friendId)
+        {
+            var friendToRemove = _friendTable.FirstOrDefault(table => table.UserId == userId && table.FriendId == friendId);
+            _friendTable.Remove(friendToRemove);
+            return _friendTable;
+        }
         internal IEnumerable<Guid> GetFriends(Guid userId)
         {
             var tables = _friendTable.Where(table => table.UserId == userId).ToList();
@@ -20,7 +26,7 @@ namespace SpyDuh.DataAccess
             tables.ForEach(id => friendsList.Add(id.FriendId));
             return friendsList;
         }
-        internal bool CheckUniqueTable(Guid userId, Guid friendId)
+        internal bool CheckUniqueFriendTable(Guid userId, Guid friendId)
         {
             var uniqueId = _friendTable.FirstOrDefault(table => table.FriendId == friendId && table.UserId == userId);
             if (uniqueId != null)
